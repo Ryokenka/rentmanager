@@ -7,7 +7,7 @@ public class Client {
     private String email;
     private LocalDate birthdate;
 
-    public Client(int id, String nom, String prenom, String email, LocalDate birthdate){
+    public Client(){
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;

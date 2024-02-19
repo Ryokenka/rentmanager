@@ -54,4 +54,11 @@ public class ClientService {
 			throw new ServiceException("Le prénom ou nom du client ne peut être vide");
 		}
 	}
+	public void delete(Client client) throws ServiceException {
+		try {
+			clientDao.delete(client);
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors de la suppression du client", e);
+		}
+	}
 }

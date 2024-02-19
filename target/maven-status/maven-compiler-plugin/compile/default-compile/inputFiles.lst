@@ -5,6 +5,7 @@ C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\pers
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\dao\ClientDao.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\models\Reservation.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\service\ServiceException.java
+C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\ui\cli\CommandLineInterface.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\persistence\FillDatabase.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\models\Client.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\service\ClientService.java

@@ -53,7 +53,7 @@ public class VehicleDao {
 		}
 	}
 
-	public long delete(Vehicule vehicle) throws DaoException {
+	public static long delete(Vehicule vehicle) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement ps = connection.prepareStatement(DELETE_VEHICLE_QUERY)) {
 
@@ -106,11 +106,11 @@ public class VehicleDao {
 	}
 
 	private Vehicule extractVehicleFromResultSet(ResultSet resultSet) throws SQLException {
-		Vehicule vehicle = new Vehicule();
-		vehicle.setId((int) resultSet.getLong("id"));
-		vehicle.setConstructeur(resultSet.getString("constructeur"));
-		vehicle.setModele(resultSet.getString("modele"));
-		vehicle.setNb_places(resultSet.getInt("nb_places"));
-		return vehicle;
+		int id = resultSet.getInt("id");
+		String constructeur = resultSet.getString("constructeur");
+		String modele = resultSet.getString("modele");
+		int nb_places = resultSet.getInt("nb_places");
+
+		return new Vehicule(id, constructeur, modele, nb_places );
 	}
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,13 +127,12 @@ public class ReservationDao {
 	}
 
 	private Reservation extractReservationFromResultSet(ResultSet resultSet) throws SQLException {
-		Reservation reservation = new Reservation();
-		reservation.setId((int) resultSet.getLong("id"));
-		reservation.setClient_id((int) resultSet.getLong("client_id"));
-		reservation.setVehicle_id((int) resultSet.getLong("vehicle_id"));
-		reservation.setDebut(resultSet.getDate("debut").toLocalDate());
-		reservation.setFin(resultSet.getDate("fin").toLocalDate());
-		return reservation;
+		int id = resultSet.getInt("id");
+		int client_id = resultSet.getInt("client_id");
+		int vehicle_id = resultSet.getInt("vehicle_id");
+		LocalDate debut = resultSet.getDate("debut").toLocalDate();
+		LocalDate fin = resultSet.getDate("fin").toLocalDate();
+		return new Reservation(id, client_id, vehicle_id, debut, fin);
 	}
 }
 

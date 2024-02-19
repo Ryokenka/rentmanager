@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.epf.rentmanager.models.Client;
 import com.epf.rentmanager.persistence.ConnectionManager;
@@ -105,13 +107,13 @@ public class ClientDao {
 	}
 
 	private Client extractClientFromResultSet(ResultSet resultSet) throws SQLException {
-		Client client = new Client();
-		client.setId((int) resultSet.getLong("id"));
-		client.setNom(resultSet.getString("nom"));
-		client.setPrenom(resultSet.getString("prenom"));
-		client.setEmail(resultSet.getString("email"));
-		client.setNaissance(resultSet.getDate("naissance").toLocalDate());
-		return client;
+		int id = resultSet.getInt("id");
+		String nom = resultSet.getString("nom");
+		String prenom = resultSet.getString("prenom");
+		String email = resultSet.getString("email");
+		LocalDate birthdate = resultSet.getDate("naissance").toLocalDate();
+
+		return new Client(id, nom, prenom, email, birthdate);
 	}
 }
 

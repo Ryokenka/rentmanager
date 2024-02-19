@@ -6,11 +6,17 @@ public class Vehicule {
     private String modele;
     private int nb_places;
     // Constructor
-    public Vehicule() {
+    public Vehicule(int id, String constructeur, String modele, int nb_places) {
         this.id = id;
         this.constructeur = constructeur;
         this.modele = modele;
         this.nb_places = nb_places;
+    }
+
+    public Vehicule(String constructeur, String modele, int nbPlaces) {
+        this.constructeur = constructeur;
+        this.modele = modele;
+        this.nb_places = nbPlaces;
     }
 
     // Getters

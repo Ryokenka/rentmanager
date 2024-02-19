@@ -10,7 +10,7 @@ public class Reservation {
     private LocalDate fin;
 
     // Constructor
-    public Reservation() {
+    public Reservation(int id, int client_id, int vehicle_id, LocalDate debut, LocalDate fin) {
         this.id = id;
         this.client_id = client_id;
         this.vehicle_id = vehicle_id;

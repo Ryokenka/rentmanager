@@ -2,9 +2,11 @@ package com.epf.rentmanager.ui.cli;
 
 import com.epf.rentmanager.models.Client;
 import com.epf.rentmanager.models.Vehicule;
+import com.epf.rentmanager.models.Reservation;
 import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.ServiceException;
 import com.epf.rentmanager.service.VehicleService;
+import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
 
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ public class CommandLineInterface {
 
     private static final ClientService clientService = ClientService.getInstance();
     private static final VehicleService vehicleService = VehicleService.getInstance();
+    private static final ReservationService reservationService = ReservationService.getInstance();
 
     public static void main(String[] args) {
         System.out.println("Bienvenue dans l'interface en ligne de commande !");
@@ -30,6 +33,11 @@ public class CommandLineInterface {
         System.out.println("4. Lister tous les véhicules");
         System.out.println("5. Supprimer un client");
         System.out.println("6. Supprimer un véhicule");
+        System.out.println("7. Créer une réservation");
+        System.out.println("8. Lister toutes les réservations");
+        System.out.println("9. Lister toutes les réservations associées à un client");
+        System.out.println("10. Lister toutes les réservations associées à un véhicule");
+        System.out.println("11. Supprimer une réservation");
         System.out.println("0. Quitter");
 
         int choice = IOUtils.readInt("Votre choix : ");
@@ -52,6 +60,21 @@ public class CommandLineInterface {
                 break;
             case 6:
                 deleteVehicle();
+                break;
+            case 7:
+                createReservation();
+                break;
+            case 8:
+                listAllReservations();
+                break;
+            case 9:
+                listReservationsByClientId();
+                break;
+            case 10:
+                listReservationsByVehicleId();
+                break;
+            case 11:
+                deleteReservation();
                 break;
             case 0:
                 System.out.println("Au revoir !");
@@ -134,24 +157,85 @@ public class CommandLineInterface {
         long id = IOUtils.readInt("ID du client à supprimer : ");
         try {
             Client client = clientService.findById(id);
-            clientService.delete(client);
-            System.out.println("Le client a été supprimé avec succès !");
+            ClientService.getInstance().delete(client);
+            System.out.println("Le client et ses réservations ont été supprimés avec succès !");
         } catch (ServiceException e) {
-            System.out.println("Erreur lors de la suppression du client : " + e.getMessage());
+            System.out.println("Erreur lors de la suppression du client et de ses réservations : " + e.getMessage());
         }
     }
+
     private static void deleteVehicle() {
         long id = IOUtils.readInt("ID du véhicule à supprimer : ");
         try {
             Vehicule vehicle = VehicleService.getInstance().findById(id);
             vehicleService.delete(vehicle);
-            System.out.println("Le véhicule a été supprimé avec succès !");
+            System.out.println("Le véhicule et ses réservations associées ont été supprimés avec succès !");
         } catch (ServiceException e) {
-            System.out.println("Erreur lors de la suppression du véhicule : " + e.getMessage());
+            System.out.println("Erreur lors de la suppression du véhicule et de ses réservations associées: " + e.getMessage());
         }
     }
+    private static void createReservation() {
+        System.out.println("Création d'une nouvelle réservation :");
+        long clientId = IOUtils.readInt("ID du client : ");
+        long vehicleId = IOUtils.readInt("ID du véhicule : ");
+        LocalDate debut = IOUtils.readDate("Date de début (dd/MM/yyyy) : ", true);
+        LocalDate fin = IOUtils.readDate("Date de fin (dd/MM/yyyy) : ", true);
+
+        try {
+            Reservation reservation = new Reservation((int) clientId, (int) vehicleId, debut, fin);
+            reservationService.create(reservation);
+            System.out.println("La réservation a été créée avec succès !");
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la création de la réservation : " + e.getMessage());
+        }
+    }
+    private static void listAllReservations() {
+        try {
+            List<Reservation> reservations = reservationService.findAll();
+            System.out.println("Liste de toutes les réservations :");
+            for (Reservation reservation : reservations) {
+                System.out.println(reservation);
+            }
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+        }
+    }
+    private static void listReservationsByClientId() {
+        long clientId = IOUtils.readInt("ID du client : ");
+        try {
+            List<Reservation> reservations = reservationService.findReservationsByClientId(clientId);
+            System.out.println("Liste des réservations associées au client " + clientId + " :");
+            for (Reservation reservation : reservations) {
+                System.out.println(reservation);
+            }
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+        }
+    }
+    private static void listReservationsByVehicleId() {
+        long vehicleId = IOUtils.readInt("ID du véhicule : ");
+        try {
+            List<Reservation> reservations = reservationService.findReservationsByVehicleId(vehicleId);
+            System.out.println("Liste des réservations associées au véhicule " + vehicleId + " :");
+            for (Reservation reservation : reservations) {
+                System.out.println(reservation);
+            }
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+        }
+    }
+    private static void deleteReservation() {
+        long reservationId = IOUtils.readInt("ID de la réservation à supprimer : ");
+        try {
+            reservationService.delete(reservationId);
+            System.out.println("La réservation a été supprimée avec succès !");
+        } catch (ServiceException e) {
+            System.out.println("Erreur lors de la suppression de la réservation : " + e.getMessage());
+        }
+    }
+
+
     private static boolean isValidEmail(String email) {
-        // Regular expression for basic email format validation
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         return email.matches(emailRegex);
     }

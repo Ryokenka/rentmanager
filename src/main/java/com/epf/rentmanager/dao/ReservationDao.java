@@ -26,6 +26,8 @@ public class ReservationDao {
 
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES (?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id = ?;";
+	private static final String FIND_RESERVATION_BY_ID_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation WHERE id = ?;";
+
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation WHERE client_id = ?;";
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation WHERE vehicle_id = ?;";
 	private static final String FIND_ALL_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
@@ -56,7 +58,7 @@ public class ReservationDao {
 		}
 	}
 
-	public void delete(long reservation) throws DaoException {
+	public void delete(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement ps = connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
 
@@ -71,6 +73,25 @@ public class ReservationDao {
 			throw new DaoException("Une erreur est survenue lors de la suppression de la réservation.", e);
 		}
 	}
+
+	public Reservation findById(long id) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_BY_ID_QUERY)) {
+
+			ps.setLong(1, id);
+
+			try (ResultSet resultSet = ps.executeQuery()) {
+				if (resultSet.next()) {
+					return extractReservationFromResultSet(resultSet);
+				} else {
+					throw new DaoException("Aucune réservation trouvée avec l'ID : " + id);
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Une erreur est survenue lors de la recherche de la réservation par ID.", e);
+		}
+	}
+
 
 	public List<Reservation> findReservationsByClientId(long clientId) throws DaoException {
 		List<Reservation> reservations = new ArrayList<>();

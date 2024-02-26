@@ -18,6 +18,13 @@ public class Reservation {
         this.fin = fin;
     }
 
+    public Reservation(int clientId, int vehicleId, LocalDate debut, LocalDate fin) {
+        this.client_id = clientId;
+        this.vehicle_id = vehicleId;
+        this.debut = debut;
+        this.fin = fin;
+    }
+
     // Getters
     public int getId() {
         return id;

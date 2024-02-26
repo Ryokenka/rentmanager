@@ -4,9 +4,8 @@ import java.util.List;
 
 import com.epf.rentmanager.dao.DaoException;
 import com.epf.rentmanager.dao.VehicleDao;
-import com.epf.rentmanager.dao.VehicleDao;
-import com.epf.rentmanager.models.Client;
 import com.epf.rentmanager.models.Vehicule;
+import com.epf.rentmanager.models.Reservation;
 
 public class VehicleService {
 
@@ -24,6 +23,8 @@ public class VehicleService {
 
 		return instance;
 	}
+
+	private static final ReservationService reservationService = ReservationService.getInstance();
 
 	public long create(Vehicule vehicule) throws ServiceException {
 		validateVehicule(vehicule);
@@ -55,11 +56,25 @@ public class VehicleService {
 			throw new ServiceException("Impossible de vérifier le constructeur et il faut un nombre de places strictement supérieur à 0");
 		}
 	}
+
 	public void delete(Vehicule vehicle) throws ServiceException {
 		try {
+			// Retrieve the vehicle's ID
+			long vehicleId = vehicle.getId();
+
+			// Retrieve reservations associated with the vehicle
+			List<Reservation> reservations = reservationService.findReservationsByVehicleId(vehicleId);
+
+			// Delete each reservation
+			for (Reservation reservation : reservations) {
+				reservationService.delete(reservation.getId());
+			}
+
+			// Delete the vehicle
 			VehicleDao.delete(vehicle);
-		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la suppression du véhicule", e);
+		} catch (DaoException | ServiceException e) {
+			throw new ServiceException("Erreur lors de la suppression du véhicule et de ses réservations", e);
 		}
 	}
 }
+

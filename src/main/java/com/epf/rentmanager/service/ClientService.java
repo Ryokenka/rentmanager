@@ -5,6 +5,7 @@ import java.util.List;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.DaoException;
 import com.epf.rentmanager.models.Client;
+import com.epf.rentmanager.models.Reservation;
 
 public class ClientService {
 
@@ -22,7 +23,7 @@ public class ClientService {
 
 		return instance;
 	}
-
+	private static final ReservationService reservationService = ReservationService.getInstance();
 	public long create(Client client) throws ServiceException {
 		validateClient(client);
 		client.setNom(client.getNom().toUpperCase());
@@ -56,9 +57,18 @@ public class ClientService {
 	}
 	public void delete(Client client) throws ServiceException {
 		try {
+			long clientId = client.getId();
+
+			List<Reservation> reservations = reservationService.findReservationsByClientId(clientId);
+
+			for (Reservation reservation : reservations) {
+				reservationService.delete(reservation.getId());
+			}
+
 			clientDao.delete(client);
-		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la suppression du client", e);
+		} catch (DaoException | ServiceException e) {
+			throw new ServiceException("Erreur lors de la suppression du client et de ses réservations", e);
 		}
 	}
+
 }

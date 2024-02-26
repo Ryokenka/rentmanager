@@ -16,18 +16,20 @@ public class CommandLineInterface {
     private static final VehicleService vehicleService = VehicleService.getInstance();
 
     public static void main(String[] args) {
-        showMenu();
+        System.out.println("Bienvenue dans l'interface en ligne de commande !");
+        while(true) {
+            showMenu();
+        }
     }
 
     private static void showMenu() {
-        System.out.println("Bienvenue dans l'interface en ligne de commande !");
         System.out.println("Veuillez choisir une option :");
         System.out.println("1. Créer un client");
         System.out.println("2. Lister tous les clients");
         System.out.println("3. Créer un véhicule");
         System.out.println("4. Lister tous les véhicules");
-        System.out.println("5. Bonus : Supprimer un client");
-        System.out.println("6. Bonus : Supprimer un véhicule");
+        System.out.println("5. Supprimer un client");
+        System.out.println("6. Supprimer un véhicule");
         System.out.println("0. Quitter");
 
         int choice = IOUtils.readInt("Votre choix : ");
@@ -64,7 +66,19 @@ public class CommandLineInterface {
         System.out.println("Création d'un nouveau client :");
         String nom = IOUtils.readString("Nom : ", true);
         String prenom = IOUtils.readString("Prénom : ", true);
-        String email = IOUtils.readString("Email : ", true);
+        String email = "";
+        boolean validEmail = false;
+
+        // Validate email format
+        while (!validEmail) {
+            email = IOUtils.readString("Email : ", true);
+            if (isValidEmail(email)) {
+                validEmail = true;
+            } else {
+                System.out.println("Format d'email incorrect. Veuillez saisir une adresse email valide.");
+            }
+        }
+
         LocalDate naissance = IOUtils.readDate("Date de naissance (dd/MM/yyyy) : ", true);
 
         try {
@@ -75,6 +89,7 @@ public class CommandLineInterface {
             System.out.println("Erreur lors de la création du client : " + e.getMessage());
         }
     }
+
 
     private static void listAllClients() {
         try {
@@ -134,5 +149,10 @@ public class CommandLineInterface {
         } catch (ServiceException e) {
             System.out.println("Erreur lors de la suppression du véhicule : " + e.getMessage());
         }
+    }
+    private static boolean isValidEmail(String email) {
+        // Regular expression for basic email format validation
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
     }
 }

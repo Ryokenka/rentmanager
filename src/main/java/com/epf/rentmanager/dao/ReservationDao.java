@@ -56,7 +56,7 @@ public class ReservationDao {
 		}
 	}
 
-	public void delete(Reservation reservation) throws DaoException {
+	public void delete(long reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement ps = connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
 

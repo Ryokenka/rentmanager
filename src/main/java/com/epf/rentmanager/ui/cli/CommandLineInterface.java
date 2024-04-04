@@ -1,5 +1,6 @@
 package com.epf.rentmanager.ui.cli;
 
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.models.Client;
 import com.epf.rentmanager.models.Vehicule;
 import com.epf.rentmanager.models.Reservation;
@@ -8,15 +9,19 @@ import com.epf.rentmanager.service.ServiceException;
 import com.epf.rentmanager.service.VehicleService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class CommandLineInterface {
+    static ApplicationContext context = new
+            AnnotationConfigApplicationContext(AppConfiguration.class);
+    static ClientService clientService = context.getBean(ClientService.class);
+    static VehicleService vehicleService = context.getBean(VehicleService.class);
+    static ReservationService reservationService = context.getBean(ReservationService.class);
 
-    private static final ClientService clientService = ClientService.getInstance();
-    private static final VehicleService vehicleService = VehicleService.getInstance();
-    private static final ReservationService reservationService = ReservationService.getInstance();
 
     public static void main(String[] args) {
         System.out.println("Bienvenue dans l'interface en ligne de commande !");
@@ -157,7 +162,7 @@ public class CommandLineInterface {
         long id = IOUtils.readInt("ID du client à supprimer : ");
         try {
             Client client = clientService.findById(id);
-            ClientService.getInstance().delete(client);
+            clientService.delete(client);
             System.out.println("Le client et ses réservations ont été supprimés avec succès !");
         } catch (ServiceException e) {
             System.out.println("Erreur lors de la suppression du client et de ses réservations : " + e.getMessage());
@@ -167,7 +172,7 @@ public class CommandLineInterface {
     private static void deleteVehicle() {
         long id = IOUtils.readInt("ID du véhicule à supprimer : ");
         try {
-            Vehicule vehicle = VehicleService.getInstance().findById(id);
+            Vehicule vehicle = vehicleService.findById(id);
             vehicleService.delete(vehicle);
             System.out.println("Le véhicule et ses réservations associées ont été supprimés avec succès !");
         } catch (ServiceException e) {

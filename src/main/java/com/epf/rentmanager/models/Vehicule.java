@@ -6,6 +6,12 @@ public class Vehicule {
     private String modele;
     private int nb_places;
     // Constructor
+    public Vehicule() {
+        this.id = -1;
+        this.constructeur = "Unknown";
+        this.modele = "Unknown";
+        this.nb_places = 0;
+    }
     public Vehicule(int id, String constructeur, String modele, int nb_places) {
         this.id = id;
         this.constructeur = constructeur;

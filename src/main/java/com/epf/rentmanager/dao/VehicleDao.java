@@ -9,24 +9,18 @@ import java.util.List;
 
 import com.epf.rentmanager.models.Vehicule;
 import com.epf.rentmanager.persistence.ConnectionManager;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class VehicleDao {
 
-	private static VehicleDao instance = null;
-
 	private VehicleDao() {}
-
-	public static VehicleDao getInstance() {
-		if (instance == null) {
-			instance = new VehicleDao();
-		}
-		return instance;
-	}
 
 	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES (?, ?, ?);";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id = ?;";
 	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id = ?;";
 	private static final String FIND_ALL_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
+	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) FROM Vehicle";
 
 	public long create(Vehicule vehicle) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -113,4 +107,19 @@ public class VehicleDao {
 
 		return new Vehicule(id, constructeur, modele, nb_places );
 	}
+
+	public int count() throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(COUNT_VEHICLES_QUERY);
+			 ResultSet rs = ps.executeQuery()) {
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else {
+				throw new DaoException("Aucun résultat trouvé lors du comptage des véhicules.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Une erreur est survenue lors du comptage des véhicules.", e);
+		}
+	}
+
 }

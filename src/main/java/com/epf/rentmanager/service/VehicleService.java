@@ -6,25 +6,19 @@ import com.epf.rentmanager.dao.DaoException;
 import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.models.Vehicule;
 import com.epf.rentmanager.models.Reservation;
+import org.springframework.stereotype.Service;
 
+@Service
 public class VehicleService {
 
 	private final VehicleDao vehicleDao;
-	private static VehicleService instance;
+	private final ReservationService reservationService;
 
-	private VehicleService() {
-		this.vehicleDao = VehicleDao.getInstance();
+	private VehicleService(VehicleDao vehicleDao, ReservationService reservationService) {
+		this.vehicleDao = vehicleDao;
+		this.reservationService = reservationService;
 	}
 
-	public static VehicleService getInstance() {
-		if (instance == null) {
-			instance = new VehicleService();
-		}
-
-		return instance;
-	}
-
-	private static final ReservationService reservationService = ReservationService.getInstance();
 
 	public long create(Vehicule vehicule) throws ServiceException {
 		validateVehicule(vehicule);
@@ -59,21 +53,24 @@ public class VehicleService {
 
 	public void delete(Vehicule vehicle) throws ServiceException {
 		try {
-			// Retrieve the vehicle's ID
 			long vehicleId = vehicle.getId();
 
-			// Retrieve reservations associated with the vehicle
 			List<Reservation> reservations = reservationService.findReservationsByVehicleId(vehicleId);
 
-			// Delete each reservation
 			for (Reservation reservation : reservations) {
 				reservationService.delete(reservation.getId());
 			}
 
-			// Delete the vehicle
 			VehicleDao.delete(vehicle);
 		} catch (DaoException | ServiceException e) {
 			throw new ServiceException("Erreur lors de la suppression du véhicule et de ses réservations", e);
+		}
+	}
+	public int countVehicles() throws ServiceException {
+		try {
+			return vehicleDao.count();
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors du comptage des véhicules", e);
 		}
 	}
 }

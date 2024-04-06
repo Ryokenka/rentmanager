@@ -25,28 +25,31 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form class="form-horizontal" method="post" action="/rents/create">
+                        <form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/rents/create">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="car" class="col-sm-2 control-label">Voiture</label>
 
                                     <div class="col-sm-10">
-                                        <select class="form-control" id="car" name="car">
-                                            <option value="1">Renault Clio</option>
-                                            <option value="2">Citroen C2</option>
-                                        </select>
-                                    </div>
+                                            <select class="form-control" id="car" name="vehicleId">
+                                                <c:forEach var="vehicle" items="${vehicles}">
+                                                    <option value="${vehicle.id}">${vehicle.modele}</option>
+                                                </c:forEach>
+                                            </select>
+                                         </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="client" class="col-sm-2 control-label">Client</label>
+                               <div class="form-group">
+                                   <label for="client" class="col-sm-2 control-label">Client</label>
 
-                                    <div class="col-sm-10">
-                                        <select class="form-control" id="client" name="client">
-                                            <option value="1">John Doe</option>
-                                            <option value="2">Jane Doe</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                   <div class="col-sm-10">
+                                       <select class="form-control" id="client" name="clientId">
+                                           <c:forEach var="client" items="${clients}">
+                                               <option value="${client.id}">${client.nom} ${client.prenom}</option>
+                                           </c:forEach>
+                                       </select>
+                                   </div>
+                               </div>
+
                                 <div class="form-group">
                                     <label for="begin" class="col-sm-2 control-label">Date de debut</label>
 

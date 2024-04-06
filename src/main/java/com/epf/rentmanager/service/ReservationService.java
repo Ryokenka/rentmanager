@@ -58,5 +58,29 @@ public class ReservationService {
             throw new ServiceException("Erreur lors de la recherche des réservations par véhicule", e);
         }
     }
+    public int count() throws ServiceException {
+        try {
+            List<Reservation> reservationList = reservationDao.findAll();
+            return reservationList.size();
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    public Reservation findById(long id) throws ServiceException {
+        try {
+            return reservationDao.findById(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Erreur lors de la recherche de la réservation par ID", e);
+        }
+    }
+
+    public Reservation update(Reservation reservation) throws ServiceException {
+        try {
+            return reservationDao.update(reservation);
+        } catch (DaoException e) {
+            throw new ServiceException("Erreur lors de la mise à jour de la réservation", e);
+        }
+    }
 }
 

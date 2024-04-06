@@ -61,7 +61,7 @@ public class VehicleService {
 				reservationService.delete(reservation.getId());
 			}
 
-			VehicleDao.delete(vehicle);
+			vehicleDao.delete(vehicle);
 		} catch (DaoException | ServiceException e) {
 			throw new ServiceException("Erreur lors de la suppression du véhicule et de ses réservations", e);
 		}

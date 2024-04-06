@@ -148,5 +148,28 @@ public class ReservationDao {
 		LocalDate fin = resultSet.getDate("fin").toLocalDate();
 		return new Reservation(id, client_id, vehicle_id, debut, fin);
 	}
+
+	public Reservation update(Reservation reservation) throws DaoException {
+		final String UPDATE_RESERVATION_QUERY = "UPDATE Reservation SET client_id = ?, vehicle_id = ?, debut = ?, fin = ? WHERE id = ?;";
+
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(UPDATE_RESERVATION_QUERY)) {
+
+			ps.setLong(1, reservation.getClient_id());
+			ps.setLong(2, reservation.getVehicle_id());
+			ps.setDate(3, java.sql.Date.valueOf(reservation.getDebut()));
+			ps.setDate(4, java.sql.Date.valueOf(reservation.getFin()));
+			ps.setLong(5, reservation.getId());
+
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected == 0) {
+				throw new DaoException("Updating the reservation failed, no rows affected.");
+			}
+
+			return reservation;
+		} catch (SQLException e) {
+			throw new DaoException("An error occurred while updating the reservation.", e);
+		}
+	}
 }
 

@@ -23,6 +23,7 @@ public class ClientDao {
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id = ?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE id = ?;";
 	private static final String FIND_ALL_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
+	private static final String COUNT_CLIENTS_QUERY = "SELECT COUNT(*) FROM Client";
 
 	public long create(Client client) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -108,6 +109,19 @@ public class ClientDao {
 		LocalDate birthdate = resultSet.getDate("naissance").toLocalDate();
 
 		return new Client(id, nom, prenom, email, birthdate);
+	}
+	public int count() throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(COUNT_CLIENTS_QUERY);
+			 ResultSet rs = ps.executeQuery()) {
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else {
+				throw new DaoException("Aucun résultat trouvé lors du comptage des clients.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Une erreur est survenue lors du comptage des clients.", e);
+		}
 	}
 }
 

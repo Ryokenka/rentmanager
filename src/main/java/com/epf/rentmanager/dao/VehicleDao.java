@@ -121,5 +121,26 @@ public class VehicleDao {
 			throw new DaoException("Une erreur est survenue lors du comptage des véhicules.", e);
 		}
 	}
+	public Vehicule update(Vehicule updatedVehicle) throws DaoException {
+		final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
+
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(UPDATE_VEHICLE_QUERY)) {
+
+			ps.setString(1, updatedVehicle.getConstructeur());
+			ps.setString(2, updatedVehicle.getModele());
+			ps.setInt(3, updatedVehicle.getNb_places());
+			ps.setLong(4, updatedVehicle.getId());
+
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected == 0) {
+				throw new DaoException("Updating the vehicle failed, no rows affected.");
+			}
+
+			return rowsAffected > 0 ? updatedVehicle : null; // Return null if no rows affected
+		} catch (SQLException e) {
+			throw new DaoException("An error occurred while updating the vehicle.", e);
+		}
+	}
 
 }

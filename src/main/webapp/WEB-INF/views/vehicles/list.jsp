@@ -45,7 +45,7 @@
                                         <a class="btn btn-primary" href="cars/details?id=${vehicle.id}">
                                             <i class="fa fa-play"></i>
                                         </a>
-                                        <a class="btn btn-success" href="#">
+                                        <a class="btn btn-success" href="cars/edit?id=${vehicle.id}">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-danger" href="cars/delete?id=${vehicle.id}">

@@ -1,6 +1,7 @@
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\service\ReservationService.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ReservationEditServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\VehicleCreateServlet.java
+C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\VehicleDetailsServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\persistence\ConnectionManager.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\VehicleListServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ReservationDeleteServlet.java
@@ -13,8 +14,10 @@ C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\dao\
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\models\Vehicule.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ClientDetailsServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\HomeServlet.java
+C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\VehicleEditServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\utils\IOUtils.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\dao\VehicleDao.java
+C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ClientEditServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ReservationCreateServlet.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\dao\ClientDao.java
 C:\Users\minor\Downloads\Java\rentmanager\src\main\java\com\epf\rentmanager\servlet\ReservationListServlet.java

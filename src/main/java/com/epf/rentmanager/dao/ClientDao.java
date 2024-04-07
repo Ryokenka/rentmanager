@@ -123,5 +123,46 @@ public class ClientDao {
 			throw new DaoException("Une erreur est survenue lors du comptage des clients.", e);
 		}
 	}
+	private static final String FIND_CLIENT_BY_EMAIL_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE email = ?;";
+	public Optional<Client> findByEmail(String email) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(FIND_CLIENT_BY_EMAIL_QUERY)) {
+
+			ps.setString(1, email);
+
+			try (ResultSet resultSet = ps.executeQuery()) {
+				if (resultSet.next()) {
+					return Optional.of(extractClientFromResultSet(resultSet));
+				} else {
+					return Optional.empty();
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Une erreur est survenue lors de la recherche du client avec l'email : " + email, e);
+		}
+	}
+	public Client update(Client updatedClient) throws DaoException {
+		final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom = ?, prenom = ?, email = ?, naissance = ? WHERE id = ?;";
+
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement ps = connection.prepareStatement(UPDATE_CLIENT_QUERY)) {
+
+			ps.setString(1, updatedClient.getNom());
+			ps.setString(2, updatedClient.getPrenom());
+			ps.setString(3, updatedClient.getEmail());
+			ps.setDate(4, java.sql.Date.valueOf(updatedClient.getNaissance()));
+			ps.setLong(5, updatedClient.getId());
+
+			int rowsAffected = ps.executeUpdate();
+			if (rowsAffected == 0) {
+				throw new DaoException("Updating the client failed, no rows affected.");
+			}
+
+			return rowsAffected > 0 ? updatedClient : null; // Return null if no rows affected
+		} catch (SQLException e) {
+			throw new DaoException("An error occurred while updating the client.", e);
+		}
+	}
+
 }
 

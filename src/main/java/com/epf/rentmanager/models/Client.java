@@ -24,6 +24,10 @@ public class Client {
         this.birthdate = naissance;
     }
 
+    public Client() {
+
+    }
+
     // Getters
     public int getId() {
         return id;
@@ -43,6 +47,10 @@ public class Client {
 
     public LocalDate getNaissance() {
         return birthdate;
+    }
+
+    public int getAge() {
+        return LocalDate.now().getYear() - getNaissance().getYear();
     }
 
     // Setters

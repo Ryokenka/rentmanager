@@ -25,6 +25,10 @@ public class Reservation {
         this.fin = fin;
     }
 
+    public Reservation() {
+
+    }
+
     // Getters
     public int getId() {
         return id;

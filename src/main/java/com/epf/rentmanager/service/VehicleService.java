@@ -73,5 +73,12 @@ public class VehicleService {
 			throw new ServiceException("Erreur lors du comptage des véhicules", e);
 		}
 	}
+	public void update(Vehicule updatedVehicle) throws ServiceException {
+		try {
+			vehicleDao.update(updatedVehicle);
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors de la mise à jour du client");
+		}
+	}
 }
 

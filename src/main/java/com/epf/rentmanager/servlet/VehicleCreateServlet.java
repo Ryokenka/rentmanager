@@ -36,6 +36,11 @@ public class VehicleCreateServlet extends HttpServlet {
         String modele = request.getParameter("modele");
         int seats = Integer.parseInt(request.getParameter("seats"));
 
+        if (seats < 2 || seats > 9) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The number of seats must be between 2 and 9.");
+            return;
+        }
+
         Vehicule vehicle = new Vehicule(0, manufacturer, modele, seats);
 
         try {
